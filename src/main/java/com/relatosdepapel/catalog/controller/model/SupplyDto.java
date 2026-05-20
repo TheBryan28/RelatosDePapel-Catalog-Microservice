@@ -1,40 +1,93 @@
 package com.relatosdepapel.catalog.controller.model;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.relatosdepapel.catalog.repository.model.SupplyFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
-        "name",
+        "title",
+        "isbn",
         "description",
-        "type",
+        "author",
+        "format",
         "price",
-        "stock"
+        "discountPct",
+        "stock",
+        "fileUrl",
+        "averageRating",
+        "reviewCount",
+        "isActive",
+        "createdAt",
+        "updatedAt",
+        "specifications",
+        "images"
 })
 @Getter
 @Setter
 @Builder
 public class SupplyDto implements Serializable {
 
-    private final static long serialVersionUID = 1901178943784643027L;
+    private static final long serialVersionUID = 1901178943784643027L;
 
     @JsonProperty("id")
     public Integer id;
-    @JsonProperty("name")
-    public String name;
+
+    @JsonProperty("title")
+    public String title;
+
+    @JsonProperty("isbn")
+    public String isbn;
+
     @JsonProperty("description")
     public String description;
-    @JsonProperty("type")
-    public String type;
+
+    @JsonProperty("author")
+    public String author;
+
+    @JsonProperty("format")
+    public SupplyFormat format;
+
     @JsonProperty("price")
-    public Double price;
+    public BigDecimal price;
+
+    @JsonProperty("discountPct")
+    public BigDecimal discountPct;
+
     @JsonProperty("stock")
     public Integer stock;
+
+    @JsonProperty("fileUrl")
+    public String fileUrl;
+
+    @JsonProperty("averageRating")
+    public BigDecimal averageRating;
+
+    @JsonProperty("reviewCount")
+    public Integer reviewCount;
+
+    @JsonProperty("isActive")
+    public Boolean isActive;
+
+    @JsonProperty("createdAt")
+    public LocalDateTime createdAt;
+
+    @JsonProperty("updatedAt")
+    public LocalDateTime updatedAt;
+
+    @JsonProperty("specifications")
+    public List<SpecificationDto> specifications;
+
+    @JsonProperty("images")
+    public List<String> images;
 }

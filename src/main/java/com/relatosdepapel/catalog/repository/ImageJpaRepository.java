@@ -14,7 +14,7 @@ public interface ImageJpaRepository extends JpaRepository<SupplyImage, Integer> 
     List<SupplyImage> findBySupplyId(Integer supplyId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM image WHERE supply_id = ?1")
+    @Query(nativeQuery = true, value = "DELETE FROM images WHERE supply_id = ?1")
     void deleteBySupplyId(Integer supplyId);
 
 }

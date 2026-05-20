@@ -26,12 +26,18 @@ public class CreateSuppliesService {
     public GetSupplyResponseDto createSupply(WriteSupplyRequestDto request) {
         // Crear la entidad Supply principal
         Supply supply = Supply.builder()
-                .name(request.getName())
+                .title(request.getTitle())
+                .isbn(request.getIsbn())
                 .description(request.getDescription())
-                .fullDescription(request.getFullDescription())
-                .type(request.getType())
-                .price(request.getPrice() != null ? BigDecimal.valueOf(request.getPrice()) : null)
-                .stock(request.getStock())
+                .author(request.getAuthor())
+                .format(request.getFormat())
+                .price(request.getPrice())
+                .discountPct(request.getDiscountPct() != null ? request.getDiscountPct() : BigDecimal.ZERO)
+                .stock(request.getStock() != null ? request.getStock() : 0)
+                .fileUrl(request.getFileUrl())
+                .averageRating(BigDecimal.ZERO)
+                .reviewCount(0)
+                .isActive(request.getIsActive() != null ? request.getIsActive() : true)
                 .build();
 
         // Crear especificaciones si existen

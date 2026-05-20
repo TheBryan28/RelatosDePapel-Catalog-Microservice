@@ -18,24 +18,20 @@ public class SupplyRepository {
 
     private final SupplyJpaRepository supplyJpaRepository;
 
-    public List<Supply> getSupplies(String name, String description, String fullDescription, String type, Double price, Integer stock) {
+    public List<Supply> getSupplies(String title, String description, String author, Double price, Integer stock) {
 
         SearchCriteria<Supply> spec = new SearchCriteria<>();
 
-        if (StringUtils.hasText(name)) {
-            spec.add(new SearchStatement(SearchFields.NAME, name, SearchOperation.MATCH));
+        if (StringUtils.hasText(title)) {
+            spec.add(new SearchStatement(SearchFields.TITLE, title, SearchOperation.MATCH));
         }
 
         if (StringUtils.hasText(description)) {
             spec.add(new SearchStatement(SearchFields.DESCRIPTION, description, SearchOperation.MATCH));
         }
 
-        if (StringUtils.hasText(fullDescription)) {
-            spec.add(new SearchStatement(SearchFields.FULL_DESCRIPTION, fullDescription, SearchOperation.MATCH));
-        }
-
-        if (StringUtils.hasText(type)) {
-            spec.add(new SearchStatement(SearchFields.TYPE, type, SearchOperation.EQUAL));
+        if (StringUtils.hasText(author)) {
+            spec.add(new SearchStatement(SearchFields.AUTHOR, author, SearchOperation.MATCH));
         }
 
         if (price != null && price > 0) {
@@ -61,10 +57,9 @@ public class SupplyRepository {
     }
 
     public List<Supply> getSupplies(
-            String name,
+            String title,
             String description,
-            String fullDescription,
-            String type,
+            String author,
             Double price,
             Integer stock,
             Integer pageSize,
@@ -72,20 +67,16 @@ public class SupplyRepository {
 
         SearchCriteria<Supply> spec = new SearchCriteria<>();
 
-        if (StringUtils.hasText(name)) {
-            spec.add(new SearchStatement(SearchFields.NAME, name, SearchOperation.MATCH));
+        if (StringUtils.hasText(title)) {
+            spec.add(new SearchStatement(SearchFields.TITLE, title, SearchOperation.MATCH));
         }
 
         if (StringUtils.hasText(description)) {
             spec.add(new SearchStatement(SearchFields.DESCRIPTION, description, SearchOperation.MATCH));
         }
 
-        if (StringUtils.hasText(fullDescription)) {
-            spec.add(new SearchStatement(SearchFields.FULL_DESCRIPTION, fullDescription, SearchOperation.MATCH));
-        }
-
-        if (StringUtils.hasText(type)) {
-            spec.add(new SearchStatement(SearchFields.TYPE, type, SearchOperation.EQUAL));
+        if (StringUtils.hasText(author)) {
+            spec.add(new SearchStatement(SearchFields.AUTHOR, author, SearchOperation.MATCH));
         }
 
         if (price != null && price > 0) {

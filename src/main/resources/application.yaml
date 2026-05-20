@@ -4,10 +4,10 @@ spring:
 
   ## Database Configuration
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/catalog}
     driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
-    username: ${DB_USER:root}
-    password: ${DB_PASSWORD:mysql}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3038/catalog}
+    username: ${SPRING_DATASOURCE_USERNAME:catalog_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:catalog_pass}
   jpa:
     show-sql: true
     hibernate:

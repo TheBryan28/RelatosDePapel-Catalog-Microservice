@@ -30,10 +30,10 @@ public class SupplyMapper {
         return supplies.stream()
                 .map(supply -> SupplyDto.builder()
                         .id(supply.getId())
-                        .name(supply.getName())
+                        .title(supply.getTitle())
+                        .isbn(supply.getIsbn())
                         .description(supply.getDescription())
-                        .type(supply.getType())
-                        .price(supply.getPrice().doubleValue())
+                        .price(supply.getPrice())
                         .stock(supply.getStock())
                         .build())
                 .toList();
@@ -42,13 +42,11 @@ public class SupplyMapper {
     public GetSupplyResponseDto asGetSupplyResponseDto(Supply supply) {
         return GetSupplyResponseDto.builder()
                 .id(supply.getId())
-                .name(supply.getName())
+                .title(supply.getTitle())
                 .description(supply.getDescription())
-                .fullDescription(supply.getFullDescription())
-                .type(supply.getType())
-                .price(supply.getPrice().doubleValue())
+                .price(supply.getPrice())
                 .stock(supply.getStock())
-                .specificationDtos(supply.getSpecificationsAsList())
+                .specifications(supply.getSpecificationsAsList())
                 .images(supply.getImageUrls())
                 .build();
     }
@@ -58,11 +56,9 @@ public class SupplyMapper {
                 () -> new SupplyNotFoundException("Supply with ID " + supplyId + " not found.")
         );
         return Supply.builder()
-                .name(supplyDto.getName())
+                .title(supplyDto.getTitle())
                 .description(supplyDto.getDescription())
-                .fullDescription(supplyDto.getFullDescription())
-                .type(supplyDto.getType())
-                .price(BigDecimal.valueOf(supplyDto.getPrice()))
+                .price(supplyDto.getPrice())
                 .stock(supplyDto.getStock())
                 .specifications(getSpecificationsFromDto(oldSupply, supplyDto.getSpecificationDtos()))
                 .images(getImagesFromDto(oldSupply, supplyDto.getImages()))
@@ -75,13 +71,11 @@ public class SupplyMapper {
         );
         return Supply.builder()
                 .id(getSupplyResponseDto.getId())
-                .name(getSupplyResponseDto.getName())
+                .title(getSupplyResponseDto.getTitle())
                 .description(getSupplyResponseDto.getDescription())
-                .fullDescription(getSupplyResponseDto.getFullDescription())
-                .type(getSupplyResponseDto.getType())
-                .price(getSupplyResponseDto.getPrice() != null ? BigDecimal.valueOf(getSupplyResponseDto.getPrice()) : null)
+                .price(getSupplyResponseDto.getPrice() != null ? getSupplyResponseDto.getPrice() : null)
                 .stock(getSupplyResponseDto.getStock())
-                .specifications(getSpecificationsFromDto(oldSupply, getSupplyResponseDto.getSpecificationDtos()))
+                .specifications(getSpecificationsFromDto(oldSupply, getSupplyResponseDto.getSpecifications()))
                 .images(getImagesFromDto(oldSupply, getSupplyResponseDto.getImages()))
                 .build();
     }

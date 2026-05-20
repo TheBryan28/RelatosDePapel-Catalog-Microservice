@@ -14,7 +14,7 @@ public interface SpecificationJpaRepository extends JpaRepository<SupplySpecific
     List<SupplySpecification> findBySupplyId(Integer supplyId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM spec WHERE supply_id = ?1")
+    @Query(nativeQuery = true, value = "DELETE FROM specs WHERE supply_id = ?1")
     void deleteBySupplyId(Integer supplyId);
 
 }

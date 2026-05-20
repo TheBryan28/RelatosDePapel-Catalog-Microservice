@@ -16,5 +16,5 @@ RUN mvn clean package
 # Marcamos el punto de arranque de la imagen con el comando "java -jar app.jar" que ejecutará nuestro componente.
 FROM eclipse-temurin:25-jre
 EXPOSE 8080
-COPY --from=build /target/catalogue-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /target/catalog-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]

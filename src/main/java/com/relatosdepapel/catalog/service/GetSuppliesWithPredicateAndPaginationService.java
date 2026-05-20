@@ -20,10 +20,9 @@ public class GetSuppliesWithPredicateAndPaginationService {
 
     @Transactional(readOnly = true)
     public GetSuppliesResponseDto getSupplies(
-            String name,
+            String title,
             String description,
-            String fullDescription,
-            String type,
+            String author,
             Double price,
             Integer stock,
             Integer pageSize,
@@ -31,11 +30,10 @@ public class GetSuppliesWithPredicateAndPaginationService {
     ) {
 
         List<Supply> supplies;
-        if (StringUtils.hasLength(name) || StringUtils.hasLength(description) || StringUtils.hasLength(fullDescription)
-                || StringUtils.hasLength(type)
+        if (StringUtils.hasLength(title) || StringUtils.hasLength(description) || StringUtils.hasLength(author)
                 || price != null
                 || stock != null) {
-            supplies = repository.getSupplies(name, description, fullDescription, type, price, stock, pageSize, page);
+            supplies = repository.getSupplies(title, description, author, price, stock, pageSize, page);
         } else {
             supplies = repository.getSupplies(pageSize, page);
         }

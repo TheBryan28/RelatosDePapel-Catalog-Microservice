@@ -21,7 +21,7 @@ public interface SupplyJpaRepository extends
 
     // Consulta nativa SQL equivalente a la anterior
     @Query(
-            value = "SELECT * FROM supply WHERE stock > 0",
+            value = "SELECT * FROM supplies WHERE stock > 0",
             nativeQuery = true)
     List<Supply> findAvailableSuppliesNative();
 
@@ -33,15 +33,15 @@ public interface SupplyJpaRepository extends
 
     // Consulta nativa SQL equivalente a la anterior
     @Query(
-            value = "SELECT s.* FROM supply s " +
-                    "LEFT JOIN spec ss ON s.id = ss.supply_id " +
-                    "LEFT JOIN image si ON s.id = si.supply_id",
+            value = "SELECT s.* FROM supplies s " +
+                    "LEFT JOIN specs ss ON s.id = ss.supply_id " +
+                    "LEFT JOIN images si ON s.id = si.supply_id",
             nativeQuery = true)
     List<Supply> findAllWithDetailsNative();
 
     // Consulta por derivacion de nombre de metodo
-    List<Supply> findByTypeIgnoreCase(String type);
+    List<Supply> findByAuthorIgnoreCase(String author);
 
     // Consulta por derivacion de nombre de metodo
-    List<Supply> findByNameContainingIgnoreCase(String name);
+    List<Supply> findByTitleContainingIgnoreCase(String title);
 }

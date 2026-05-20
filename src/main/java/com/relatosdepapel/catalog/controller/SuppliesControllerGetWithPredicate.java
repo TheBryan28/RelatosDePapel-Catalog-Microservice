@@ -16,13 +16,12 @@ public class SuppliesControllerGetWithPredicate {
 
     @GetMapping("supplies")
     public ResponseEntity<GetSuppliesResponseDto> getSupplies(
-            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) String fullDescription,
-            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String author,
             @RequestParam(required = false) Double price,
             @RequestParam(required = false) Integer stock
     ) {
-        return ResponseEntity.ok(getSuppliesService.getSupplies(name, description, fullDescription, type, price, stock));
+        return ResponseEntity.ok(getSuppliesService.getSupplies(title, description, author, price, stock));
     }
 }
