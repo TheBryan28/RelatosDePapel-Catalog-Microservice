@@ -36,6 +36,7 @@ public class ModifySuppliesService {
     @Transactional
     public GetSupplyResponseDto modifySupply(Integer supplyId, String jsonPart) {
         //PATCH se implementa en este caso mediante Merge Patch: https://datatracker.ietf.org/doc/html/rfc7386
+        System.out.println(supplyId+"SupplyId");
         GetSupplyResponseDto supply = supplyMapper
                 .asGetSupplyResponseDto(
                         supplyJpaRepository
