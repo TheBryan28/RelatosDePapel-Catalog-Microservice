@@ -3,10 +3,8 @@ package com.relatosdepapel.catalog.controller;
 import com.relatosdepapel.catalog.controller.model.WriteSupplyRequestDto;
 import com.relatosdepapel.catalog.controller.model.GetSuppliesResponseDto;
 import com.relatosdepapel.catalog.controller.model.GetSupplyResponseDto;
-import com.relatosdepapel.catalog.service.CreateSuppliesService;
-import com.relatosdepapel.catalog.service.DeleteSuppliesService;
-import com.relatosdepapel.catalog.service.GetSuppliesService;
-import com.relatosdepapel.catalog.service.ModifySuppliesService;
+import com.relatosdepapel.catalog.repository.model.SupplyFormat;
+import com.relatosdepapel.catalog.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +16,24 @@ import org.springframework.web.bind.annotation.*;
 public class SuppliesController {
 
     private final GetSuppliesService getSuppliesService;
+    private final GetSuppliesWithPredicateAndPaginationService getSuppliesWithPaginationService;
     private final ModifySuppliesService modifySuppliesService;
     private final DeleteSuppliesService deleteSuppliesService;
     private final CreateSuppliesService createSuppliesService;
 
     @GetMapping("supplies")
-    public ResponseEntity<GetSuppliesResponseDto> getSupplies() {
-        return ResponseEntity.ok(getSuppliesService.getSupplies());
+    public ResponseEntity<GetSuppliesResponseDto> getSupplies(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) Integer stock,
+            @RequestParam(required = false) SupplyFormat format,
+            @RequestParam(required = false, defaultValue = "true") Boolean active,
+            @RequestParam(required = false, defaultValue = "5") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "0") Integer page
+    ) {
+        return ResponseEntity.ok(getSuppliesWithPaginationService.getSupplies(title, description, author, price, stock, active, format, pageSize, page));
     }
 
     @GetMapping("supplies/{supplyId}")

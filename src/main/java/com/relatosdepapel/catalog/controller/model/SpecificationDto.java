@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+        "id",
+        "supply_id",
         "specKey",
         "specValue"
 })
@@ -20,6 +22,12 @@ import java.io.Serializable;
 public class SpecificationDto implements Serializable {
 
     private final static long serialVersionUID = 1901178943784643027L;
+
+    @JsonProperty("id")
+    private Integer id;
+
+    @JsonProperty("supply_id")
+    private Integer supplyId;
 
     @JsonProperty("specKey")
     private String specKey;

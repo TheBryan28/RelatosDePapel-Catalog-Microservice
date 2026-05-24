@@ -1,6 +1,7 @@
 package com.relatosdepapel.catalog.repository;
 
 import com.relatosdepapel.catalog.repository.model.Supply;
+import com.relatosdepapel.catalog.repository.model.SupplyFormat;
 import com.relatosdepapel.catalog.repository.predicate.SearchCriteria;
 import com.relatosdepapel.catalog.repository.predicate.SearchFields;
 import com.relatosdepapel.catalog.repository.predicate.SearchOperation;
@@ -62,10 +63,14 @@ public class SupplyRepository {
             String author,
             Double price,
             Integer stock,
+            Boolean active,
+            SupplyFormat format,
             Integer pageSize,
             Integer page) {
 
         SearchCriteria<Supply> spec = new SearchCriteria<>();
+
+        spec.add(new SearchStatement(SearchFields.ACTIVE, active, SearchOperation.EQUAL));
 
         if (StringUtils.hasText(title)) {
             spec.add(new SearchStatement(SearchFields.TITLE, title, SearchOperation.MATCH));
@@ -85,6 +90,10 @@ public class SupplyRepository {
 
         if (stock != null && stock > 0) {
             spec.add(new SearchStatement(SearchFields.STOCK, stock, SearchOperation.GREATER_THAN_EQUAL));
+        }
+
+        if (format != null) {
+            spec.add(new SearchStatement(SearchFields.FORMAT, format, SearchOperation.EQUAL));
         }
 
         return supplyJpaRepository.findAll(spec, Pageable.ofSize(pageSize).withPage(page)).getContent();

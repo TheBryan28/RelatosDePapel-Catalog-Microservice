@@ -4,16 +4,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.relatosdepapel.catalog.repository.model.SupplyFormat;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.relatosdepapel.catalog.repository.model.SupplyImage;
+import com.relatosdepapel.catalog.repository.model.SupplySpecification;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+        "id",
         "title",
         "isbn",
         "description",
@@ -23,16 +25,25 @@ import java.util.List;
         "discountPct",
         "stock",
         "fileUrl",
+        "averageRating",
+        "reviewCount",
         "isActive",
-        "specificationDtos",
+        "createdAt",
+        "updatedAt",
+        "specifications",
         "images"
 })
 @Getter
 @Setter
 @Builder
-public class WriteSupplyRequestDto implements Serializable {
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class UpdateSupplyDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @JsonProperty("id")
+    public Integer id;
 
     @JsonProperty("title")
     public String title;
@@ -58,21 +69,24 @@ public class WriteSupplyRequestDto implements Serializable {
     @JsonProperty("stock")
     public Integer stock;
 
+    @JsonProperty("fileUrl")
+    public String fileUrl;
+
     @JsonProperty("averageRating")
     public BigDecimal averageRating;
 
     @JsonProperty("reviewCount")
     public Integer reviewCount;
 
-    @JsonProperty("fileUrl")
-    public String fileUrl;
-
     @JsonProperty("isActive")
     public Boolean isActive;
 
-    @JsonProperty("specificationDtos")
-    public List<SpecificationDto> specificationDtos;
+    @JsonProperty("updatedAt")
+    public LocalDateTime updatedAt;
+
+    @JsonProperty("specifications")
+    public List<SupplySpecification> specifications;
 
     @JsonProperty("images")
-    public List<String> images;
+    public List<SupplyImage> images;
 }

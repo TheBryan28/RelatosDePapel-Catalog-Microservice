@@ -3,6 +3,7 @@ package com.relatosdepapel.catalog.service;
 import com.relatosdepapel.catalog.controller.model.GetSuppliesResponseDto;
 import com.relatosdepapel.catalog.repository.SupplyRepository;
 import com.relatosdepapel.catalog.repository.model.Supply;
+import com.relatosdepapel.catalog.repository.model.SupplyFormat;
 import com.relatosdepapel.catalog.utils.SupplyMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,18 @@ public class GetSuppliesWithPredicateAndPaginationService {
             String author,
             Double price,
             Integer stock,
+            Boolean active,
+            SupplyFormat format,
             Integer pageSize,
             Integer page
     ) {
 
         List<Supply> supplies;
         if (StringUtils.hasLength(title) || StringUtils.hasLength(description) || StringUtils.hasLength(author)
+                || format != null
                 || price != null
                 || stock != null) {
-            supplies = repository.getSupplies(title, description, author, price, stock, pageSize, page);
+            supplies = repository.getSupplies(title, description, author, price, stock, active, format, pageSize, page);
         } else {
             supplies = repository.getSupplies(pageSize, page);
         }
