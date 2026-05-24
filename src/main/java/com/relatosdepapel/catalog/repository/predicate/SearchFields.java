@@ -8,4 +8,5 @@ public class SearchFields {
     public static final String FORMAT = "format";
     public static final String PRICE = "price";
     public static final String STOCK = "stock";
+    public static final String ACTIVE = "isActive";
 }

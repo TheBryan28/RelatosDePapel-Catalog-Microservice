@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import com.relatosdepapel.catalog.controller.model.GetSupplyResponseDto;
+import com.relatosdepapel.catalog.controller.model.UpdateSupplyDto;
 import com.relatosdepapel.catalog.controller.model.WriteSupplyRequestDto;
 import com.relatosdepapel.catalog.exception.SupplyNotFoundException;
 import com.relatosdepapel.catalog.repository.SupplyJpaRepository;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -37,8 +40,7 @@ public class ModifySuppliesService {
     public GetSupplyResponseDto modifySupply(Integer supplyId, String jsonPart) {
         //PATCH se implementa en este caso mediante Merge Patch: https://datatracker.ietf.org/doc/html/rfc7386
         System.out.println(supplyId+"SupplyId");
-        GetSupplyResponseDto supply = supplyMapper
-                .asGetSupplyResponseDto(
+        UpdateSupplyDto supply = supplyMapper.asGetSupplyDto(
                         supplyJpaRepository
                                 .findById(supplyId)
                                 .orElseThrow(() -> new SupplyNotFoundException("Supply with ID " + supplyId + " not found.")));
@@ -48,9 +50,20 @@ public class ModifySuppliesService {
             JsonMergePatch mergePatch = JsonMergePatch.fromJson(patch); // ✅ Desde el patch entrante
             // Apply the patch to the actual supply
             JsonNode patchedSupplyNode = mergePatch.apply(actualSupply); // ✅ Aplicando al supply actual
-            GetSupplyResponseDto patchedSupply = objectMapper.treeToValue(patchedSupplyNode, GetSupplyResponseDto.class);
+            UpdateSupplyDto patchedSupply = objectMapper.treeToValue(patchedSupplyNode, UpdateSupplyDto.class);
             patchedSupply.setId(supplyId);
-            Supply savedSupply = supplyJpaRepository.save(supplyMapper.asSupply(patchedSupply));
+            patchedSupply.setUpdatedAt(LocalDateTime.now());
+            Supply auxSupply = supplyMapper.asUpdateSupply(patchedSupply);
+            // ✅ Reasignar la referencia padre en cada colección
+            if (patchedSupply.getSpecifications() != null) {
+                patchedSupply.getSpecifications()
+                        .forEach(spec -> spec.setSupply(auxSupply));
+            }
+            if (patchedSupply.getImages() != null) {
+                patchedSupply.getImages()
+                        .forEach(image -> image.setSupply(auxSupply));
+            }
+            Supply savedSupply = supplyJpaRepository.save(supplyMapper.asUpdateSupply(patchedSupply));
             return supplyMapper.asGetSupplyResponseDto(savedSupply);
         } catch (JsonProcessingException | JsonPatchException e) {
             log.error("Error processing JSON patch for supply ID {}: {}", supplyId, e.getMessage(), e);

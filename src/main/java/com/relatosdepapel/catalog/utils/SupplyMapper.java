@@ -1,9 +1,6 @@
 package com.relatosdepapel.catalog.utils;
 
-import com.relatosdepapel.catalog.controller.model.GetSupplyResponseDto;
-import com.relatosdepapel.catalog.controller.model.SpecificationDto;
-import com.relatosdepapel.catalog.controller.model.SupplyDto;
-import com.relatosdepapel.catalog.controller.model.WriteSupplyRequestDto;
+import com.relatosdepapel.catalog.controller.model.*;
 import com.relatosdepapel.catalog.exception.SupplyNotFoundException;
 import com.relatosdepapel.catalog.repository.ImageJpaRepository;
 import com.relatosdepapel.catalog.repository.SpecificationJpaRepository;
@@ -45,9 +42,37 @@ public class SupplyMapper {
                 .title(supply.getTitle())
                 .description(supply.getDescription())
                 .price(supply.getPrice())
+                .discountPct(supply.getDiscountPct())
                 .stock(supply.getStock())
+                .format(supply.getFormat())
+                .isbn(supply.getIsbn())
+                .author(supply.getAuthor())
+                .averageRating(supply.getAverageRating())
+                .reviewCount(supply.getReviewCount())
+                .fileUrl(supply.getFileUrl())
+                .isActive(supply.getIsActive())
                 .specifications(supply.getSpecificationsAsList())
                 .images(supply.getImageUrls())
+                .build();
+    }
+
+    public UpdateSupplyDto asGetSupplyDto(Supply supply) {
+        return UpdateSupplyDto.builder()
+                .id(supply.getId())
+                .title(supply.getTitle())
+                .description(supply.getDescription())
+                .price(supply.getPrice())
+                .discountPct(supply.getDiscountPct())
+                .stock(supply.getStock())
+                .format(supply.getFormat())
+                .isbn(supply.getIsbn())
+                .author(supply.getAuthor())
+                .averageRating(supply.getAverageRating())
+                .reviewCount(supply.getReviewCount())
+                .fileUrl(supply.getFileUrl())
+                .isActive(supply.getIsActive())
+                .specifications(supply.getSpecifications())
+                .images(supply.getImages())
                 .build();
     }
 
@@ -59,7 +84,15 @@ public class SupplyMapper {
                 .title(supplyDto.getTitle())
                 .description(supplyDto.getDescription())
                 .price(supplyDto.getPrice())
+                .discountPct(supplyDto.getDiscountPct())
                 .stock(supplyDto.getStock())
+                .format(supplyDto.getFormat())
+                .isbn(supplyDto.getIsbn())
+                .author(supplyDto.getAuthor())
+                .averageRating(supplyDto.getAverageRating())
+                .reviewCount(supplyDto.getReviewCount())
+                .fileUrl(supplyDto.getFileUrl())
+                .isActive(supplyDto.getIsActive())
                 .specifications(getSpecificationsFromDto(oldSupply, supplyDto.getSpecificationDtos()))
                 .images(getImagesFromDto(oldSupply, supplyDto.getImages()))
                 .build();
@@ -74,9 +107,37 @@ public class SupplyMapper {
                 .title(getSupplyResponseDto.getTitle())
                 .description(getSupplyResponseDto.getDescription())
                 .price(getSupplyResponseDto.getPrice() != null ? getSupplyResponseDto.getPrice() : null)
+                .discountPct(getSupplyResponseDto.getDiscountPct())
                 .stock(getSupplyResponseDto.getStock())
+                .format(getSupplyResponseDto.getFormat())
+                .isbn(getSupplyResponseDto.getIsbn())
+                .author(getSupplyResponseDto.getAuthor())
+                .averageRating(getSupplyResponseDto.getAverageRating())
+                .reviewCount(getSupplyResponseDto.getReviewCount())
+                .fileUrl(getSupplyResponseDto.getFileUrl())
+                .isActive(getSupplyResponseDto.getIsActive())
                 .specifications(getSpecificationsFromDto(oldSupply, getSupplyResponseDto.getSpecifications()))
                 .images(getImagesFromDto(oldSupply, getSupplyResponseDto.getImages()))
+                .build();
+    }
+
+    public Supply asUpdateSupply(UpdateSupplyDto getSupplyResponseDto) {
+        return Supply.builder()
+                .id(getSupplyResponseDto.getId())
+                .title(getSupplyResponseDto.getTitle())
+                .description(getSupplyResponseDto.getDescription())
+                .price(getSupplyResponseDto.getPrice() != null ? getSupplyResponseDto.getPrice() : null)
+                .discountPct(getSupplyResponseDto.getDiscountPct())
+                .stock(getSupplyResponseDto.getStock())
+                .format(getSupplyResponseDto.getFormat())
+                .isbn(getSupplyResponseDto.getIsbn())
+                .author(getSupplyResponseDto.getAuthor())
+                .averageRating(getSupplyResponseDto.getAverageRating())
+                .reviewCount(getSupplyResponseDto.getReviewCount())
+                .fileUrl(getSupplyResponseDto.getFileUrl())
+                .isActive(getSupplyResponseDto.getIsActive())
+                .specifications(getSupplyResponseDto.getSpecifications())
+                .images(getSupplyResponseDto.getImages())
                 .build();
     }
 
