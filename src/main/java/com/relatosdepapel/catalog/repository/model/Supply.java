@@ -73,6 +73,9 @@ public class Supply {
     @OneToMany(mappedBy = "supply", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<SupplyImage> images = new ArrayList<>();
 
+    @OneToMany(mappedBy = "supply", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
     public List<SpecificationDto> getSpecificationsAsList() {
         if (specifications == null) {
             return Collections.emptyList();
