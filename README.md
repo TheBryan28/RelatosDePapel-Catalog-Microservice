@@ -80,3 +80,4 @@ A continuación se detallan todos los endpoints disponibles en el microservicio.
   "updatedAt": "2026-05-26T17:50:00"
 }
 ```
+
