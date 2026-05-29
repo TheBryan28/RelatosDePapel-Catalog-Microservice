@@ -1,13 +1,15 @@
 package com.relatosdepapel.catalog.controller;
 
-import com.relatosdepapel.catalog.controller.model.WriteSupplyRequestDto;
-import com.relatosdepapel.catalog.controller.model.GetSuppliesResponseDto;
-import com.relatosdepapel.catalog.controller.model.GetSupplyResponseDto;
+import com.relatosdepapel.catalog.controller.model.*;
 import com.relatosdepapel.catalog.repository.model.SupplyFormat;
 import com.relatosdepapel.catalog.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -64,6 +66,14 @@ public class SuppliesController {
     public ResponseEntity<Void> deleteSupply(@PathVariable Long supplyId) {
         deleteSuppliesService.deleteSupply(supplyId.intValue());
         return ResponseEntity.noContent().build();
+    }
+
+    // se reserva el POST supplies/batch endpoint para creación en batch de supplies
+
+    // endpoint para obtener cientos de supplies en batch
+    @PostMapping("supplies/get-in-batch")
+    public ResponseEntity<Map<BigInteger, SupplyBatchDto>> getSuppliesInBatch(@RequestBody GetInBatchDto request) {
+        return ResponseEntity.ok(getSuppliesService.getSuppliesInBatch(request.getSuppliesIds()));
     }
 
 }

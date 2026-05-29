@@ -1,5 +1,6 @@
 package com.relatosdepapel.catalog.repository;
 
+import com.relatosdepapel.catalog.controller.model.SupplyBatchDto;
 import com.relatosdepapel.catalog.repository.model.Supply;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -44,4 +46,6 @@ public interface SupplyJpaRepository extends
 
     // Consulta por derivacion de nombre de metodo
     List<Supply> findByTitleContainingIgnoreCase(String title);
+
+    List<SupplyBatchDto> findByIdInAndIsActiveTrue(List<BigInteger> ids);
 }

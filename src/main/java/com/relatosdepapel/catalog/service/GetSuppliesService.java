@@ -2,6 +2,7 @@ package com.relatosdepapel.catalog.service;
 
 import com.relatosdepapel.catalog.controller.model.GetSuppliesResponseDto;
 import com.relatosdepapel.catalog.controller.model.GetSupplyResponseDto;
+import com.relatosdepapel.catalog.controller.model.SupplyBatchDto;
 import com.relatosdepapel.catalog.exception.SupplyNotFoundException;
 import com.relatosdepapel.catalog.repository.SupplyJpaRepository;
 import com.relatosdepapel.catalog.repository.model.Supply;
@@ -10,8 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +50,34 @@ public class GetSuppliesService {
                         .build()
         ).orElseThrow(
                 () -> new SupplyNotFoundException("Supply not found with id: " + supplyId));
+    }
+
+    @Transactional(readOnly = true)
+    public Map<BigInteger, SupplyBatchDto> getSuppliesInBatch(List<BigInteger> suppliesIds) {
+        if (suppliesIds == null || suppliesIds.isEmpty()) {
+            return new HashMap<>();
+        }
+        if (suppliesIds.size() > 2500) {
+            throw new IllegalArgumentException("Batch size must not exceed 2500.");
+        }
+        Map<BigInteger, SupplyBatchDto> allResults = new HashMap<>();
+        int maxBatch = 500;
+        int totalIds = suppliesIds.size();
+
+        for (int i = 0; i < totalIds; i += maxBatch) {
+            int fin = Math.min(i + maxBatch, totalIds);
+            List<BigInteger> loteActual = suppliesIds.subList(i, fin);
+            List<SupplyBatchDto> result = repository.findByIdInAndIsActiveTrue(loteActual);
+            Map<BigInteger, SupplyBatchDto> batch = result.stream()
+                    .collect(Collectors.toMap(
+                            s -> BigInteger.valueOf(s.getId()),
+                            s -> s,
+                            (oldData, newData) -> oldData
+                    ));
+            allResults.putAll(batch);
+        }
+
+        return allResults;
+
     }
 }
