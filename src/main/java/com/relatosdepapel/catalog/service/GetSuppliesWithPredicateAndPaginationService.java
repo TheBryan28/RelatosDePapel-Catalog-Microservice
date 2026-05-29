@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +30,11 @@ public class GetSuppliesWithPredicateAndPaginationService {
             Integer stock,
             Boolean active,
             SupplyFormat format,
+            String isbn,
+            BigDecimal discount,
+            BigDecimal averageRating,
+            Integer reviewCount,
+            LocalDateTime releaseDate,
             Integer pageSize,
             Integer page
     ) {
@@ -36,8 +43,27 @@ public class GetSuppliesWithPredicateAndPaginationService {
         if (StringUtils.hasLength(title) || StringUtils.hasLength(description) || StringUtils.hasLength(author)
                 || format != null
                 || price != null
-                || stock != null) {
-            supplies = repository.getSupplies(title, description, author, price, stock, active, format, pageSize, page);
+                || stock != null
+                || isbn != null
+                || discount != null
+                || averageRating != null
+                || reviewCount != null
+                || releaseDate != null) {
+            supplies = repository.getSupplies(
+                    title,
+                    description,
+                    author,
+                    price,
+                    stock,
+                    active,
+                    format,
+                    isbn,
+                    discount,
+                    averageRating,
+                    reviewCount,
+                    releaseDate,
+                    pageSize,
+                    page);
         } else {
             supplies = repository.getSupplies(pageSize, page);
         }

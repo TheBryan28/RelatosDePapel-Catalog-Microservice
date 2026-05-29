@@ -32,6 +32,10 @@ public class SupplyMapper {
                         .description(supply.getDescription())
                         .price(supply.getPrice())
                         .stock(supply.getStock())
+                        .author(supply.getAuthor())
+                        .format(supply.getFormat())
+                        .averageRating(supply.getAverageRating())
+                        .reviewCount(supply.getReviewCount())
                         .build())
                 .toList();
     }
