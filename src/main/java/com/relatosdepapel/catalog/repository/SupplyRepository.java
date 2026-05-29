@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -65,35 +67,46 @@ public class SupplyRepository {
             Integer stock,
             Boolean active,
             SupplyFormat format,
+            String isbn,
+            BigDecimal discount,
+            BigDecimal averageRating,
+            Integer reviewCount,
+            LocalDateTime releaseDate,
             Integer pageSize,
             Integer page) {
 
         SearchCriteria<Supply> spec = new SearchCriteria<>();
 
         spec.add(new SearchStatement(SearchFields.ACTIVE, active, SearchOperation.EQUAL));
-
         if (StringUtils.hasText(title)) {
             spec.add(new SearchStatement(SearchFields.TITLE, title, SearchOperation.MATCH));
         }
-
         if (StringUtils.hasText(description)) {
             spec.add(new SearchStatement(SearchFields.DESCRIPTION, description, SearchOperation.MATCH));
         }
-
         if (StringUtils.hasText(author)) {
             spec.add(new SearchStatement(SearchFields.AUTHOR, author, SearchOperation.MATCH));
         }
-
         if (price != null && price > 0) {
             spec.add(new SearchStatement(SearchFields.PRICE, price, SearchOperation.LESS_THAN_EQUAL));
         }
-
         if (stock != null && stock > 0) {
             spec.add(new SearchStatement(SearchFields.STOCK, stock, SearchOperation.GREATER_THAN_EQUAL));
         }
-
         if (format != null) {
             spec.add(new SearchStatement(SearchFields.FORMAT, format, SearchOperation.EQUAL));
+        }
+        if (isbn != null && !isbn.isEmpty()) {
+            spec.add(new SearchStatement(SearchFields.ISBN, isbn, SearchOperation.EQUAL));
+        }
+        if (discount != null && discount.compareTo(BigDecimal.ZERO) > 0) {
+            spec.add(new SearchStatement(SearchFields.DISCOUNT, discount, SearchOperation.GREATER_THAN_EQUAL));
+        }
+        if (averageRating != null && averageRating.compareTo(BigDecimal.ZERO) > 0) {
+            spec.add(new SearchStatement(SearchFields.AVERAGE_RATING, averageRating, SearchOperation.GREATER_THAN_EQUAL));
+        }
+        if (reviewCount != null && reviewCount > 0) {
+            spec.add(new SearchStatement(SearchFields.REVIEW_COUNT, reviewCount, SearchOperation.GREATER_THAN_EQUAL));
         }
 
         return supplyJpaRepository.findAll(spec, Pageable.ofSize(pageSize).withPage(page)).getContent();

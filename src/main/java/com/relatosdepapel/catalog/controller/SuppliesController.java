@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +33,30 @@ public class SuppliesController {
             @RequestParam(required = false) Double price,
             @RequestParam(required = false) Integer stock,
             @RequestParam(required = false) SupplyFormat format,
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) BigDecimal discount,
+            @RequestParam(required = false) BigDecimal averageRating,
+            @RequestParam(required = false) Integer reviewCount,
+            @RequestParam(required = false) LocalDateTime releaseDate,
             @RequestParam(required = false, defaultValue = "true") Boolean active,
             @RequestParam(required = false, defaultValue = "5") Integer pageSize,
             @RequestParam(required = false, defaultValue = "0") Integer page
     ) {
-        return ResponseEntity.ok(getSuppliesWithPaginationService.getSupplies(title, description, author, price, stock, active, format, pageSize, page));
+        return ResponseEntity.ok(getSuppliesWithPaginationService.getSupplies(
+                title,
+                description,
+                author,
+                price,
+                stock,
+                active,
+                format,
+                isbn,
+                discount,
+                averageRating,
+                reviewCount,
+                releaseDate,
+                pageSize,
+                page));
     }
 
     @GetMapping("supplies/{supplyId}")
