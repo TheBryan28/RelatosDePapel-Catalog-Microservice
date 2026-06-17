@@ -82,15 +82,3 @@ CREATE TABLE IF NOT exists book_category
     FOREIGN KEY (category_id) REFERENCES categories (id)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- user table: debe ir en el microservicio de usuarios, pero por ahora se agregará aquí para facilitar las pruebas
-CREATE TABLE IF NOT exists users (
-     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-     name VARCHAR(100),
-     email VARCHAR(255) NOT NULL UNIQUE,
-     password VARCHAR(255) NOT NULL,
-     gender ENUM('MALE', 'FEMALE', 'OTHER'),
-     birth_date DATE,
-     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);

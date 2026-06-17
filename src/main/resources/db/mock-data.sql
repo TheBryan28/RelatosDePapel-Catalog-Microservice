@@ -18,22 +18,6 @@ INSERT INTO categories (name, description) VALUES
 ('Drama', 'Dramas emocionales, conflictos humanos y transformaciones');
 
 -- ============================================
--- 2. INSERTAR 5 USUARIOS CON CONTRASEÑAS BCRYPT
--- ============================================
--- Usuario 1: admin / password123 (bcrypt: $2a$10$gVxKVVP7vWGHd6cxzqjYo.vM0PDqaFJHMzG1gU.N/vUPPvKfNvLxW)
--- Usuario 2: juan / juan2024 (bcrypt: $2a$10$6n0D4UqB.BU.o7hYVcmOxuPjz1dYm5Yc8k4r2s9t8u.n7v5q4d3)
--- Usuario 3: maria / maria2024 (bcrypt: $2a$10$r5n0F4UqD.CU.p8iZdnPyxQkz2eZn6Zd9l5s3t0u9v.o8w6r5e4)
--- Usuario 4: carlos / carlos2024 (bcrypt: $2a$10$s3m0G5VrE.DV.q9jAeoPzxRkz2fAo7Ae0m6t4u1v0w.p9x7s6f5)
--- Usuario 5: lucia / lucia2024 (bcrypt: $2a$10$t4n0H6WsF.EW.r0kBfpQaySkz3gBp8Bf1n7u5v2w1x.q0y8t7g6)
-
-INSERT INTO users (name, email, password, gender, birth_date) VALUES
-('Admin User', 'admin@relatosdepapel.com', '$2a$10$gVxKVVP7vWGHd6cxzqjYo.vM0PDqaFJHMzG1gU.N/vUPPvKfNvLxW', 'OTHER', '1990-01-15'),
-('Juan Pérez', 'juan@example.com', '$2a$10$6n0D4UqB.BU.o7hYVcmOxuPjz1dYm5Yc8k4r2s9t8u.n7v5q4d3', 'MALE', '1995-03-22'),
-('María García', 'maria@example.com', '$2a$10$r5n0F4UqD.CU.p8iZdnPyxQkz2eZn6Zd9l5s3t0u9v.o8w6r5e4', 'FEMALE', '1992-07-10'),
-('Carlos López', 'carlos@example.com', '$2a$10$s3m0G5VrE.DV.q9jAeoPzxRkz2fAo7Ae0m6t4u1v0w.p9x7s6f5', 'MALE', '1988-11-05'),
-('Lucía Martínez', 'lucia@example.com', '$2a$10$t4n0H6WsF.EW.r0kBfpQaySkz3gBp8Bf1n7u5v2w1x.q0y8t7g6', 'FEMALE', '1998-05-18');
-
--- ============================================
 -- 3. INSERTAR 110 SUPPLIES (LIBROS)
 -- ============================================
 INSERT INTO supplies (title, isbn, description, author, format, price, discount_pct, stock, is_active) VALUES
