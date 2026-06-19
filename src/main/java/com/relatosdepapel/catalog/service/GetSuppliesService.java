@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,10 +44,13 @@ public class GetSuppliesService {
                         .isbn(s.getIsbn())
                         .averageRating(s.getAverageRating())
                         .reviewCount(s.getReviewCount())
+                        .discountPct(s.getDiscountPct())
                         .price(s.getPrice())
+                        .finalPrice(s.getPrice().subtract(s.getPrice().multiply(s.getDiscountPct().divide(BigDecimal.valueOf(100)))))
                         .stock(s.getStock())
                         .specifications(s.getSpecificationsAsList())
                         .images(s.getImageUrls())
+                        .categories(s.getCategoriesNames())
                         .build()
         ).orElseThrow(
                 () -> new SupplyNotFoundException("Supply not found with id: " + supplyId));

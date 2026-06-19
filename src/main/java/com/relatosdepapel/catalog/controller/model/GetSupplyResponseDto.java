@@ -21,6 +21,7 @@ import java.util.List;
         "format",
         "price",
         "discountPct",
+        "finalPrice",
         "stock",
         "fileUrl",
         "averageRating",
@@ -29,7 +30,8 @@ import java.util.List;
         "createdAt",
         "updatedAt",
         "specifications",
-        "images"
+        "images",
+        "categories"
 })
 @Getter
 @Setter
@@ -64,6 +66,9 @@ public class GetSupplyResponseDto implements Serializable {
     @JsonProperty("discountPct")
     public BigDecimal discountPct;
 
+    @JsonProperty("finalPrice")
+    public BigDecimal finalPrice;
+
     @JsonProperty("stock")
     public Integer stock;
 
@@ -90,4 +95,7 @@ public class GetSupplyResponseDto implements Serializable {
 
     @JsonProperty("images")
     public List<String> images;
+
+    @JsonProperty("categories")
+    public List<String> categories;
 }
