@@ -6,6 +6,7 @@ import com.relatosdepapel.catalog.repository.model.Supply;
 import com.relatosdepapel.catalog.repository.model.SupplyFormat;
 import com.relatosdepapel.catalog.utils.SupplyMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class GetSuppliesWithPredicateAndPaginationService {
 
@@ -39,6 +41,7 @@ public class GetSuppliesWithPredicateAndPaginationService {
             Integer page
     ) {
 
+        long start = System.currentTimeMillis();
         List<Supply> supplies;
         if (StringUtils.hasLength(title) || StringUtils.hasLength(description) || StringUtils.hasLength(author)
                 || format != null
@@ -67,8 +70,12 @@ public class GetSuppliesWithPredicateAndPaginationService {
         } else {
             supplies = repository.getSupplies(pageSize, page);
         }
-        return GetSuppliesResponseDto.builder()
+        GetSuppliesResponseDto result = GetSuppliesResponseDto.builder()
                 .supplies(mapper.asSupplyDtoList(supplies))
                 .build();
+
+        long end = System.currentTimeMillis();
+        log.info("tiempo para obtener datos de db y mapper respuesta {}", end -  start);
+        return result;
     }
 }

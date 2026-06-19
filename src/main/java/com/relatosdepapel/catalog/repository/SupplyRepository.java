@@ -6,19 +6,31 @@ import com.relatosdepapel.catalog.repository.predicate.SearchCriteria;
 import com.relatosdepapel.catalog.repository.predicate.SearchFields;
 import com.relatosdepapel.catalog.repository.predicate.SearchOperation;
 import com.relatosdepapel.catalog.repository.predicate.SearchStatement;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class SupplyRepository {
 
+    private final EntityManager entityManager;
     private final SupplyJpaRepository supplyJpaRepository;
 
     public List<Supply> getSupplies(String title, String description, String author, Double price, Integer stock) {
@@ -75,8 +87,38 @@ public class SupplyRepository {
             Integer pageSize,
             Integer page) {
 
-        SearchCriteria<Supply> spec = new SearchCriteria<>();
+        SearchCriteria<Supply> spec = getSearchCriteria(
+                title,
+                description,
+                author,
+                price,
+                stock,
+                active,
+                format,
+                isbn,
+                discount,
+                averageRating,
+                reviewCount,
+                releaseDate);
 
+        return getSuppliesWithCustomQuery(spec, pageSize, page);
+    }
+
+    private SearchCriteria<Supply> getSearchCriteria(
+         String title,
+         String description,
+         String author,
+         Double price,
+         Integer stock,
+         Boolean active,
+         SupplyFormat format,
+         String isbn,
+         BigDecimal discount,
+         BigDecimal averageRating,
+         Integer reviewCount,
+         LocalDateTime releaseDate
+    ) {
+        SearchCriteria<Supply> spec = new SearchCriteria<>();
         spec.add(new SearchStatement(SearchFields.ACTIVE, active, SearchOperation.EQUAL));
         if (StringUtils.hasText(title)) {
             spec.add(new SearchStatement(SearchFields.TITLE, title, SearchOperation.MATCH));
@@ -108,7 +150,53 @@ public class SupplyRepository {
         if (reviewCount != null && reviewCount > 0) {
             spec.add(new SearchStatement(SearchFields.REVIEW_COUNT, reviewCount, SearchOperation.GREATER_THAN_EQUAL));
         }
+        return spec;
+    }
 
-        return supplyJpaRepository.findAll(spec, Pageable.ofSize(pageSize).withPage(page)).getContent();
+    public List<Supply> getSuppliesWithCustomQuery(
+            SearchCriteria<Supply> spec,
+            Integer pageSize,
+            Integer page) {
+
+        Pageable pageable = Pageable.ofSize(pageSize).withPage(page);
+
+        // FASE 1: IDs paginados (1 query ligera)
+        List<Integer> ids = findIdsBySpec(spec, pageable);
+        if (ids.isEmpty()) return List.of();
+
+        // FASE 2: datos completos (2 queries, sin N+1)
+        List<Supply> supplies = supplyJpaRepository.findWithImagesByIds(ids);
+        supplyJpaRepository.findWithCategoriesByIds(ids);
+
+        // preserva el orden de paginación
+        Map<Integer, Supply> map = supplies.stream()
+                .collect(Collectors.toMap(Supply::getId, s -> s));
+
+        return ids.stream()
+                .map(map::get)
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    public List<Integer> findIdsBySpec(Specification<Supply> spec, Pageable pageable) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Integer> query = cb.createQuery(Integer.class);
+        Root<Supply> root = query.from(Supply.class);
+
+        // aplica el mismo Specification
+        if (spec != null) {
+            Predicate predicate = spec.toPredicate(root, query, cb);
+            if (predicate != null) {
+                query.where(predicate);
+            }
+        }
+
+        query.select(root.get("id"));
+        query.orderBy(cb.desc(root.get("createdAt"))); // tu orden preferido
+
+        return entityManager.createQuery(query)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
     }
 }
