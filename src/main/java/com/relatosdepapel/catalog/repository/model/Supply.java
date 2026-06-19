@@ -76,6 +76,14 @@ public class Supply {
     @OneToMany(mappedBy = "supply", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "supply_category",
+            joinColumns = @JoinColumn(name = "supply_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories = new ArrayList<>();
+
     public List<SpecificationDto> getSpecificationsAsList() {
         if (specifications == null) {
             return Collections.emptyList();
@@ -94,6 +102,15 @@ public class Supply {
         }
         return images.stream()
                 .map(SupplyImage::getImageUrl)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getCategoriesNames() {
+        if (categories == null) {
+            return new ArrayList<>();
+        }
+        return categories.stream()
+                .map(Category::getName)
                 .collect(Collectors.toList());
     }
 }

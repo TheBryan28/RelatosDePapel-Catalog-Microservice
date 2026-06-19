@@ -70,15 +70,15 @@ CREATE TABLE IF NOT exists images (
               ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT exists book_category
+CREATE TABLE IF NOT exists supply_category
 (
-    book_id     BIGINT NOT NULL,
+    supply_id     BIGINT NOT NULL,
     category_id BIGINT NOT NULL,
-    PRIMARY KEY (book_id, category_id),
-    CONSTRAINT fk_book_category_book_id
-    FOREIGN KEY (book_id) REFERENCES supplies (id)
+    PRIMARY KEY (supply_id, category_id),
+    CONSTRAINT fk_book_category_supply_id
+    FOREIGN KEY (supply_id) REFERENCES supplies (id)
     ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_book_category_category_id
+    CONSTRAINT fk_supply_category_category_id
     FOREIGN KEY (category_id) REFERENCES categories (id)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
